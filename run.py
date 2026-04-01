@@ -44,12 +44,17 @@ from google.cloud import bigquery
 # CONFIG  (all from environment variables)
 # ─────────────────────────────────────────────
 
-KAGGLE_USERNAME   = os.environ.get("KAGGLE_USERNAME")
-KAGGLE_KEY        = os.environ.get("KAGGLE_KEY")
-GCP_PROJECT       = os.environ.get("GCP_PROJECT")
-BQ_DATASET        = os.environ.get("BQ_DATASET")
-STREAMLIT_APP_URL = os.environ.get("STREAMLIT_APP_URL")
-FORCE_RELOAD      = os.environ.get("FORCE_RELOAD", "false").lower() == "true"
+import toml
+from google.oauth2 import service_account
+
+_secrets = toml.load(".streamlit/secrets.toml")
+
+KAGGLE_USERNAME   = _secrets["KAGGLE_USERNAME"]
+KAGGLE_KEY        = _secrets["KAGGLE_KEY"]
+GCP_PROJECT       = _secrets["GCP_PROJECT"]
+BQ_DATASET        = _secrets["BQ_DATASET"]
+STREAMLIT_APP_URL = _secrets["STREAMLIT_APP_URL"]
+FORCE_RELOAD      = _secrets.get("FORCE_RELOAD", "false").lower() == "true"
 
 KAGGLE_DATASET    = "san-francisco/sf-building-permits-and-contacts"
 PERMITS_CSV       = "building-permits.csv"
@@ -314,7 +319,11 @@ def main():
 
     validate_env()
 
-    bq = bigquery.Client(project=GCP_PROJECT)
+    creds = service_account.Credentials.from_service_account_info(
+        _secrets["gcp_service_account"],
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+    bq = bigquery.Client(project=GCP_PROJECT, credentials=creds)
 
     if not FORCE_RELOAD and tables_exist(bq):
         print("\n✅  BigQuery tables already exist with data.")
