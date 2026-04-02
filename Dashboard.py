@@ -182,11 +182,13 @@ RULES
 ════════════════════════════════════════════════════════
 1. Always use backtick-quoted column names since many have spaces.
 2. Default LIMIT 10 for row-returning queries; no LIMIT for aggregations.
-3. For off-topic question   s return exactly: INVALID
+3. For off-topic questions return exactly: INVALID
 4. For questions about individual names return exactly: INVALID (names were removed for privacy)
 5. String comparisons use LOWER() for case-insensitivity.
 6. Use SAFE_CAST for numeric columns to avoid errors.
-7. Dates are stored as DATE type in BigQuery — use EXTRACT(YEAR FROM `Issued Date`) or CAST directly, no PARSE_DATE needed.
+7. When computing AVG or SUM of `Estimated Cost` or `Revised Cost`, always exclude zero
+   and NULL values by adding `AND \`Estimated Cost\` > 0` to the WHERE clause.
+   This prevents near-zero averages caused by permits filed without a cost estimate.
 """
 
 
