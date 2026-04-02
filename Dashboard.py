@@ -77,7 +77,7 @@ def load_map_data():
 def load_timeline_data():
     df = bq.query(f"""
         SELECT
-            EXTRACT(YEAR FROM CAST(`Issued Date` AS DATE)) AS Year,
+            EXTRACT(YEAR FROM PARSE_DATETIME('%Y-%m-%dT%H:%M:%E3S', `Issued Date`)) AS Year,
             COUNT(*) AS permits_issued
         FROM `{GCP_PROJECT}.{BQ_DATASET}.building_permits`
         WHERE `Issued Date` IS NOT NULL
