@@ -169,13 +169,14 @@ filed, filing, granted, incomplete, inspection, issued, issuing, plancheck,
 reinstated, revoked, suspend, unknown, upheld, withdrawn
 "active/in progress" → issued | "done/finished" → complete | "pending" → plancheck
 
-Date format in the table is MM/DD/YYYY strings — always use PARSE_DATE('%m/%d/%Y', column)
-to convert before filtering or extracting.
+Date columns are stored as ISO datetime strings e.g. "2005-10-04T00:00:00.000".
+Always parse them using PARSE_DATETIME('%Y-%m-%dT%H:%M:%E3S', `Issued Date`) before
+filtering or extracting. To get the year: EXTRACT(YEAR FROM PARSE_DATETIME('%Y-%m-%dT%H:%M:%E3S', `Issued Date`))
 
 Relative dates on `Issued Date`:
-"this year"     → PARSE_DATE('%m/%d/%Y', `Issued Date`) >= '2025-01-01'
-"last year"     → PARSE_DATE('%m/%d/%Y', `Issued Date`) BETWEEN '2024-01-01' AND '2024-12-31'
-"recent/lately" → PARSE_DATE('%m/%d/%Y', `Issued Date`) >= '2023-01-01'
+"this year"     → EXTRACT(YEAR FROM PARSE_DATETIME('%Y-%m-%dT%H:%M:%E3S', `Issued Date`)) = 2025
+"last year"     → EXTRACT(YEAR FROM PARSE_DATETIME('%Y-%m-%dT%H:%M:%E3S', `Issued Date`)) = 2024
+"recent/lately" → EXTRACT(YEAR FROM PARSE_DATETIME('%Y-%m-%dT%H:%M:%E3S', `Issued Date`)) >= 2023
 
 ════════════════════════════════════════════════════════
 RULES
