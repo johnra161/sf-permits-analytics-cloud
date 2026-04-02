@@ -68,27 +68,19 @@ BQ_CONTACTS_TABLE = "building_permits_contacts"
 # ─────────────────────────────────────────────
 
 def validate_env():
-    """Fail fast with a clear message if any required variable is missing."""
+    """Fail fast with a clear message if any required secret is missing."""
     required = {
-        "KAGGLE_USERNAME":              KAGGLE_USERNAME,
-        "KAGGLE_KEY":                   KAGGLE_KEY,
-        "GCP_PROJECT":                  GCP_PROJECT,
-        "BQ_DATASET":                   BQ_DATASET,
-        "STREAMLIT_APP_URL":            STREAMLIT_APP_URL,
-        "GOOGLE_APPLICATION_CREDENTIALS": os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"),
+        "KAGGLE_USERNAME":  KAGGLE_USERNAME,
+        "KAGGLE_KEY":       KAGGLE_KEY,
+        "GCP_PROJECT":      GCP_PROJECT,
+        "BQ_DATASET":       BQ_DATASET,
+        "STREAMLIT_APP_URL": STREAMLIT_APP_URL,
     }
     missing = [k for k, v in required.items() if not v]
     if missing:
-        print("\n❌  Missing required environment variables:")
+        print("\n❌  Missing values in .streamlit/secrets.toml:")
         for var in missing:
             print(f"    {var}")
-        print("\nSet them in your shell before running:")
-        print("  export KAGGLE_USERNAME=your_username")
-        print("  export KAGGLE_KEY=your_api_key")
-        print("  export GCP_PROJECT=logical-carver-489015-h1")
-        print("  export BQ_DATASET=sf_permits")
-        print("  export GOOGLE_APPLICATION_CREDENTIALS=/path/to/sa-key.json")
-        print("  export STREAMLIT_APP_URL=https://your-app.streamlit.app")
         sys.exit(1)
 
 
