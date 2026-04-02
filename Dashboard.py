@@ -185,7 +185,9 @@ RULES
 3. For off-topic questions return exactly: INVALID
 4. For questions about individual names return exactly: INVALID (names were removed for privacy)
 5. String comparisons use LOWER() for case-insensitivity.
-6. Use SAFE_CAST for numeric columns to avoid errors.
+6. `Estimated Cost` and `Revised Cost` are stored as STRING in BigQuery.
+   Always cast them using SAFE_CAST(`Estimated Cost` AS FLOAT64) — never BIGNUMERIC.
+   When computing AVG or SUM, also exclude zero and null: AND SAFE_CAST(`Estimated Cost` AS FLOAT64) > 0
 7. When computing AVG or SUM of `Estimated Cost` or `Revised Cost`, always exclude zero
    and NULL values by adding `AND \`Estimated Cost\` > 0` to the WHERE clause.
    This prevents near-zero averages caused by permits filed without a cost estimate.
