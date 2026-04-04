@@ -191,6 +191,20 @@ Common phrasing → exact value:
 "address", "street"
   → `Street Number`, `Street Name`, `Street Suffix`
 
+Exact neighbourhood values for `Neighborhoods - Analysis Boundaries`:
+  Bayview Hunters Point, Bernal Heights, Castro/Upper Market, Chinatown,
+  Excelsior, Financial District/South Beach, Glen Park, Golden Gate Park,
+  Haight Ashbury, Hayes Valley, Inner Richmond, Inner Sunset, Japantown,
+  Lakeshore, Lincoln Park, Lone Mountain/USF, Marina, McLaren Park, Mission,
+  Mission Bay, Nob Hill, Noe Valley, North Beach, Oceanview/Merced/Ingleside,
+  Outer Mission, Outer Richmond, Pacific Heights, Portola, Potrero Hill,
+  Presidio, Presidio Heights, Russian Hill, Seacliff, South of Market,
+  Sunset/Parkside, Tenderloin, Treasure Island, Twin Peaks, Visitacion Valley,
+  West of Twin Peaks, Western Addition
+
+Always use LIKE for this column: LOWER(`Neighborhoods - Analysis Boundaries`) LIKE '%user_term%'
+Never use = — neighbourhood names as typed by users rarely match exactly.
+
 ── PERMIT TYPE ────────────────────────────────────────
 "type of permit", "permit category", "kind of permit"
   → `Permit Type Definition`  (ALWAYS prefer over `Permit Type`)
